@@ -8,18 +8,18 @@ export const inngest = new Inngest({ id: "quickcart-next" });
 //Hàm Inngest để lưu dữ liệu user vào database
 export const syncUserCreation = inngest.createFunction(
     {
-        id: 'sync-user-from-cleck'
+        id:'sync-user-from-cleck'
     },
-    { event: 'cleck/user.created' },
-    async ({ event }) => {
+    { event: 'cleck/user.created'},
+    async ({event}) => {
         const { id, first_name, last_name, email_addresses, image_url } = event.data
         const userData = {
-            _id: id,
+            _id:id,
             email: email_addresses[0].email_addresses,
             name: first_name + ' ' + last_name,
             imageUrl: image_url
         }
-        await connectDB
+        await connectDB()
         await User.create(userData)
     }
 )
@@ -38,8 +38,8 @@ export const syncUserUpdation = inngest.createFunction(
             name: first_name + ' ' + last_name,
             imageUrl: image_url
         }
-        await connectDB
-        await User.findByIdAndUpdate(id, userData)
+        await connectDB()
+        await User.findByIdAndUpdate(id,userData)
     }
 )
 
@@ -53,7 +53,7 @@ export const syncUserDeletion = inngest.createFunction(
 
         const { id } = event.data
 
+        await connectDB()
         await User.findByIdAndDelete(id)
-        await connectDB
     }
 )
